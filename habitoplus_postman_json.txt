@@ -1,0 +1,375 @@
+{
+  "info": {
+    "name": "HábitoPlus - Sprint 3",
+    "_postman_id": "habitoplus-sprint3-collection",
+    "description": "Coleção completa de endpoints da API HábitoPlus - Sprint 3 (SOA e WebServices).\n\nBase URL: http://localhost:8080\n\nEndpoints disponíveis:\n- /api/v1/habitos (CRUD de hábitos)\n- /api/v1/usuarios (CRUD de colaboradores)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "👤 Usuários",
+      "item": [
+        {
+          "name": "Cadastrar Colaborador",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colaboradorId\": \"COL-004\",\n  \"nome\": \"João Pedro Alves\",\n  \"email\": \"joao.alves@empresa.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Cadastra um novo colaborador no sistema.\n\nRetorna 201 Created com os dados do colaborador criado.\nRetorna 400 se os dados forem inválidos."
+          },
+          "response": [
+            {
+              "name": "201 - Colaborador criado",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 4,\n  \"colaboradorId\": \"COL-004\",\n  \"nome\": \"João Pedro Alves\",\n  \"email\": \"joao.alves@empresa.com\",\n  \"dataCadastro\": \"2025-11-28T10:00:00\"\n}"
+            },
+            {
+              "name": "400 - Dados inválidos",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": 400,\n  \"erro\": \"Erro de Validação\",\n  \"mensagem\": \"O e-mail é obrigatório\",\n  \"timestamp\": \"2025-11-28T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Todos os Colaboradores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios"]
+            },
+            "description": "Retorna a lista de todos os colaboradores cadastrados.\n\nRetorna 200 OK com array de colaboradores."
+          },
+          "response": [
+            {
+              "name": "200 - Lista de colaboradores",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 1,\n    \"colaboradorId\": \"COL-001\",\n    \"nome\": \"Ana Beatriz Silva\",\n    \"email\": \"ana.silva@empresa.com\",\n    \"dataCadastro\": \"2025-11-28T10:00:00\"\n  },\n  {\n    \"id\": 2,\n    \"colaboradorId\": \"COL-002\",\n    \"nome\": \"Carlos Eduardo Lima\",\n    \"email\": \"carlos.lima@empresa.com\",\n    \"dataCadastro\": \"2025-11-28T10:00:00\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Buscar Colaborador por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/COL-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "COL-001"]
+            },
+            "description": "Retorna os dados de um colaborador específico pelo colaboradorId.\n\nRetorna 200 OK com os dados.\nRetorna 404 se não encontrado."
+          },
+          "response": [
+            {
+              "name": "200 - Colaborador encontrado",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"colaboradorId\": \"COL-001\",\n  \"nome\": \"Ana Beatriz Silva\",\n  \"email\": \"ana.silva@empresa.com\",\n  \"dataCadastro\": \"2025-11-28T10:00:00\"\n}"
+            },
+            {
+              "name": "404 - Não encontrado",
+              "status": "Not Found",
+              "code": 404,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": 404,\n  \"erro\": \"Recurso Não Encontrado\",\n  \"mensagem\": \"Colaborador com ID 'COL-001' não encontrado.\",\n  \"timestamp\": \"2025-11-28T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Deletar Colaborador",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/COL-004",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "COL-004"]
+            },
+            "description": "Remove um colaborador e todos os seus hábitos associados (cascade).\n\nRetorna 204 No Content se removido.\nRetorna 404 se não encontrado."
+          },
+          "response": [
+            {
+              "name": "204 - Removido com sucesso",
+              "status": "No Content",
+              "code": 204,
+              "header": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🏃 Hábitos",
+      "item": [
+        {
+          "name": "Registrar Hábito - CORRIDA",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colaboradorId\": \"COL-001\",\n  \"tipoAtividade\": \"CORRIDA\",\n  \"descricao\": \"Corrida matinal no parque\",\n  \"minutosDuracao\": 45\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Registra um hábito de corrida para o colaborador COL-001.\n\nPontos gerados: 45 min × 10 (multiplicador CORRIDA) = 450 pontos\n\nTipos disponíveis:\n- CORRIDA (×10)\n- NATACAO (×10)\n- CICLISMO (×9)\n- MUSCULACAO (×8)\n- YOGA (×6)\n- CAMINHADA (×5)\n- MEDITACAO (×4)\n- OUTROS (×3)\n\nRetorna 201 Created."
+          },
+          "response": [
+            {
+              "name": "201 - Hábito registrado",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"colaboradorId\": \"COL-001\",\n  \"tipoAtividade\": \"CORRIDA\",\n  \"descricaoAtividade\": \"Corrida ou caminhada acelerada\",\n  \"descricao\": \"Corrida matinal no parque\",\n  \"minutosDuracao\": 45,\n  \"pontosGerados\": 450,\n  \"dataRegistro\": \"2025-11-28T10:30:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Registrar Hábito - MUSCULACAO",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colaboradorId\": \"COL-002\",\n  \"tipoAtividade\": \"MUSCULACAO\",\n  \"descricao\": \"Treino de força — superiores\",\n  \"minutosDuracao\": 60\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Registra um hábito de musculação.\nPontos: 60 × 8 = 480"
+          },
+          "response": [
+            {
+              "name": "201 - Hábito registrado",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 2,\n  \"colaboradorId\": \"COL-002\",\n  \"tipoAtividade\": \"MUSCULACAO\",\n  \"descricaoAtividade\": \"Musculação ou treino de força\",\n  \"descricao\": \"Treino de força — superiores\",\n  \"minutosDuracao\": 60,\n  \"pontosGerados\": 480,\n  \"dataRegistro\": \"2025-11-28T11:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Registrar Hábito - YOGA",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colaboradorId\": \"COL-003\",\n  \"tipoAtividade\": \"YOGA\",\n  \"descricao\": \"Aula de yoga online\",\n  \"minutosDuracao\": 50\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Registra um hábito de yoga.\nPontos: 50 × 6 = 300"
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Hábito - ❌ Validação (duração inválida)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colaboradorId\": \"COL-001\",\n  \"tipoAtividade\": \"CORRIDA\",\n  \"descricao\": \"Muito curto\",\n  \"minutosDuracao\": 5\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Exemplo de requisição inválida — minutosDuracao abaixo do mínimo de 10.\nEspera retorno 400 Bad Request."
+          },
+          "response": [
+            {
+              "name": "400 - Duração inválida",
+              "status": "Bad Request",
+              "code": 400,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": 400,\n  \"erro\": \"Erro de Validação\",\n  \"mensagem\": \"A atividade deve ter no mínimo 10 minutos\",\n  \"timestamp\": \"2025-11-28T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Todos os Hábitos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos"]
+            },
+            "description": "Retorna todos os hábitos registrados no sistema.\n\nRetorna 200 OK com array."
+          },
+          "response": [
+            {
+              "name": "200 - Lista de hábitos",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 1,\n    \"colaboradorId\": \"COL-001\",\n    \"tipoAtividade\": \"CORRIDA\",\n    \"descricaoAtividade\": \"Corrida ou caminhada acelerada\",\n    \"descricao\": \"Corrida matinal no parque\",\n    \"minutosDuracao\": 45,\n    \"pontosGerados\": 450,\n    \"dataRegistro\": \"2025-11-28T10:30:00\"\n  },\n  {\n    \"id\": 2,\n    \"colaboradorId\": \"COL-002\",\n    \"tipoAtividade\": \"MUSCULACAO\",\n    \"descricaoAtividade\": \"Musculação ou treino de força\",\n    \"descricao\": \"Treino de força — superiores\",\n    \"minutosDuracao\": 60,\n    \"pontosGerados\": 480,\n    \"dataRegistro\": \"2025-11-28T11:00:00\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Buscar Hábito por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos", "1"]
+            },
+            "description": "Busca um hábito específico pelo seu ID.\n\nRetorna 200 OK se encontrado.\nRetorna 404 se não encontrado."
+          },
+          "response": [
+            {
+              "name": "200 - Hábito encontrado",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"colaboradorId\": \"COL-001\",\n  \"tipoAtividade\": \"CORRIDA\",\n  \"descricaoAtividade\": \"Corrida ou caminhada acelerada\",\n  \"descricao\": \"Corrida matinal no parque\",\n  \"minutosDuracao\": 45,\n  \"pontosGerados\": 450,\n  \"dataRegistro\": \"2025-11-28T10:30:00\"\n}"
+            },
+            {
+              "name": "404 - Não encontrado",
+              "status": "Not Found",
+              "code": 404,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": 404,\n  \"erro\": \"Recurso Não Encontrado\",\n  \"mensagem\": \"Hábito com ID 1 não encontrado.\",\n  \"timestamp\": \"2025-11-28T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Hábitos por Colaborador",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos/colaborador/COL-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos", "colaborador", "COL-001"]
+            },
+            "description": "Retorna todos os hábitos de um colaborador específico.\n\nTroque COL-001 pelo ID do colaborador desejado."
+          },
+          "response": [
+            {
+              "name": "200 - Hábitos do colaborador",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[\n  {\n    \"id\": 1,\n    \"colaboradorId\": \"COL-001\",\n    \"tipoAtividade\": \"CORRIDA\",\n    \"descricaoAtividade\": \"Corrida ou caminhada acelerada\",\n    \"descricao\": \"Corrida matinal no parque\",\n    \"minutosDuracao\": 45,\n    \"pontosGerados\": 450,\n    \"dataRegistro\": \"2025-11-28T10:30:00\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Hábito",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colaboradorId\": \"COL-001\",\n  \"tipoAtividade\": \"NATACAO\",\n  \"descricao\": \"Natação na academia\",\n  \"minutosDuracao\": 40\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Atualiza os dados de um hábito existente pelo seu ID.\n\nNovos pontos: 40 × 10 = 400\n\nRetorna 200 OK com dados atualizados.\nRetorna 404 se não encontrado."
+          },
+          "response": [
+            {
+              "name": "200 - Hábito atualizado",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"colaboradorId\": \"COL-001\",\n  \"tipoAtividade\": \"NATACAO\",\n  \"descricaoAtividade\": \"Natação\",\n  \"descricao\": \"Natação na academia\",\n  \"minutosDuracao\": 40,\n  \"pontosGerados\": 400,\n  \"dataRegistro\": \"2025-11-28T10:30:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Deletar Hábito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/habitos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "habitos", "1"]
+            },
+            "description": "Remove um hábito pelo seu ID.\n\nRetorna 204 No Content se removido.\nRetorna 404 se não encontrado."
+          },
+          "response": [
+            {
+              "name": "204 - Removido com sucesso",
+              "status": "No Content",
+              "code": 204,
+              "header": [],
+              "body": ""
+            },
+            {
+              "name": "404 - Não encontrado",
+              "status": "Not Found",
+              "code": 404,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": 404,\n  \"erro\": \"Recurso Não Encontrado\",\n  \"mensagem\": \"Hábito com ID 1 não encontrado.\",\n  \"timestamp\": \"2025-11-28T10:00:00\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
